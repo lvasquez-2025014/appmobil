@@ -1,6 +1,7 @@
 package com.example.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -239,10 +240,15 @@ fun TransactionListItem(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
+            .border(
+                width = 0.5.dp,
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
+                shape = RoundedCornerShape(16.dp)
+            )
             .testTag("tx_item_${tx.id}"),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
             modifier = Modifier
@@ -252,18 +258,19 @@ fun TransactionListItem(
         ) {
             Box(
                 modifier = Modifier
-                    .size(42.dp)
+                    .size(40.dp)
                     .clip(CircleShape)
                     .background(
-                        if (tx.isIncome) Color(0xFFDCFCE7) else Color(0xFFFEE2E2)
+                        if (tx.isIncome) com.example.ui.theme.AppleSystemGreen.copy(alpha = 0.15f)
+                        else com.example.ui.theme.AppleSystemRed.copy(alpha = 0.15f)
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = if (tx.isIncome) Icons.Default.ArrowUpward else Icons.Default.ArrowDownward,
                     contentDescription = null,
-                    tint = if (tx.isIncome) Color(0xFF166534) else Color(0xFF991B1B),
-                    modifier = Modifier.size(20.dp)
+                    tint = if (tx.isIncome) com.example.ui.theme.AppleSystemGreen else com.example.ui.theme.AppleSystemRed,
+                    modifier = Modifier.size(18.dp)
                 )
             }
             Spacer(modifier = Modifier.width(12.dp))
@@ -280,8 +287,8 @@ fun TransactionListItem(
             }
             Text(
                 text = (if (tx.isIncome) "+" else "-") + "$${String.format(Locale.US, "%.2f", tx.amount)}",
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = if (tx.isIncome) Color(0xFF10B981) else Color(0xFFEF4444)
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                color = if (tx.isIncome) com.example.ui.theme.AppleSystemGreen else com.example.ui.theme.AppleSystemRed
             )
             Spacer(modifier = Modifier.width(4.dp))
             IconButton(
@@ -291,7 +298,7 @@ fun TransactionListItem(
                 Icon(
                     imageVector = Icons.Default.DeleteOutline,
                     contentDescription = "Eliminar",
-                    tint = MaterialTheme.colorScheme.outline
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )
             }
         }

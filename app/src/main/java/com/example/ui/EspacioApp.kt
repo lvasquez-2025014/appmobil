@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -198,31 +199,45 @@ fun EspacioApp(
             )
         },
         bottomBar = {
-            NavigationBar(
-                containerColor = MaterialTheme.colorScheme.surface,
-                tonalElevation = 6.dp
-            ) {
-                navItems.forEach { item ->
-                    val isSelected = uiState.currentDestination == item.destination
-                    NavigationBarItem(
-                        selected = isSelected,
-                        onClick = { viewModel.navigateTo(item.destination) },
-                        icon = {
-                            Icon(
-                                imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
-                                contentDescription = item.destination.label
-                            )
-                        },
-                        label = {
-                            Text(
-                                text = item.destination.label,
-                                style = MaterialTheme.typography.labelSmall.copy(
-                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+            Column {
+                androidx.compose.material3.HorizontalDivider(
+                    thickness = 0.5.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
+                )
+                NavigationBar(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    tonalElevation = 0.dp
+                ) {
+                    navItems.forEach { item ->
+                        val isSelected = uiState.currentDestination == item.destination
+                        NavigationBarItem(
+                            selected = isSelected,
+                            onClick = { viewModel.navigateTo(item.destination) },
+                            colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
+                                selectedIconColor = com.example.ui.theme.AppleSystemBlue,
+                                selectedTextColor = com.example.ui.theme.AppleSystemBlue,
+                                indicatorColor = Color.Transparent,
+                                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                            ),
+                            icon = {
+                                Icon(
+                                    imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
+                                    contentDescription = item.destination.label
                                 )
-                            )
-                        },
-                        modifier = Modifier.testTag(item.testTag)
-                    )
+                            },
+                            label = {
+                                Text(
+                                    text = item.destination.label,
+                                    style = MaterialTheme.typography.labelSmall.copy(
+                                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                                        fontSize = 11.sp
+                                    )
+                                )
+                            },
+                            modifier = Modifier.testTag(item.testTag)
+                        )
+                    }
                 }
             }
         },

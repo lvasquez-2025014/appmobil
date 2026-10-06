@@ -359,6 +359,9 @@ class GeminiAiService {
     }
 
     private fun executePost(endpoint: String, jsonBody: String): String {
+        if (apiKey.isBlank()) {
+            throw Exception("Clave de API no configurada. Por favor agrega GEMINI_API_KEY en el panel de Secrets de AI Studio.")
+        }
         val mediaType = "application/json; charset=utf-8".toMediaType()
         val body = jsonBody.toRequestBody(mediaType)
         val request = Request.Builder()

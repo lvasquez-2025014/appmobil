@@ -1,6 +1,7 @@
 package com.example.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -170,11 +171,16 @@ fun FullHabitCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(18.dp))
+            .border(
+                width = 0.5.dp,
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
+                shape = RoundedCornerShape(18.dp)
+            )
             .testTag("full_habit_card_${habit.id}"),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
@@ -188,7 +194,7 @@ fun FullHabitCard(
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(44.dp)
+                            .size(42.dp)
                             .clip(CircleShape)
                             .background(Color(habit.colorHex).copy(alpha = 0.15f)),
                         contentAlignment = Alignment.Center
@@ -197,14 +203,14 @@ fun FullHabitCard(
                             imageVector = Icons.Default.WaterDrop,
                             contentDescription = null,
                             tint = Color(habit.colorHex),
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(22.dp)
                         )
                     }
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text(
                             text = habit.name,
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
                         )
                         Text(
                             text = "Meta: ${habit.targetDaysPerWeek} días/semana",
@@ -217,21 +223,21 @@ fun FullHabitCard(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFFFEF3C7))
-                        .padding(horizontal = 10.dp, vertical = 6.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(com.example.ui.theme.AppleSystemOrange.copy(alpha = 0.15f))
+                        .padding(horizontal = 10.dp, vertical = 5.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.LocalFireDepartment,
                         contentDescription = "Racha",
-                        tint = Color(0xFFD97706),
-                        modifier = Modifier.size(18.dp)
+                        tint = com.example.ui.theme.AppleSystemOrange,
+                        modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = "${habit.streak} días",
                         style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                        color = Color(0xFF92400E)
+                        color = com.example.ui.theme.AppleSystemOrange
                     )
                 }
             }
@@ -253,7 +259,7 @@ fun FullHabitCard(
                             .clip(CircleShape)
                             .background(
                                 when {
-                                    isToday && habit.completedToday -> Color(0xFF10B981)
+                                    isToday && habit.completedToday -> com.example.ui.theme.AppleSystemGreen
                                     isPastActive -> Color(habit.colorHex).copy(alpha = 0.85f)
                                     else -> MaterialTheme.colorScheme.surfaceVariant
                                 }
@@ -286,14 +292,14 @@ fun FullHabitCard(
                     .fillMaxWidth()
                     .testTag("toggle_habit_btn_${habit.id}"),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (habit.completedToday) Color(0xFF10B981) else MaterialTheme.colorScheme.primary,
+                    containerColor = if (habit.completedToday) com.example.ui.theme.AppleSystemGreen else MaterialTheme.colorScheme.primary,
                     contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(
                     text = if (habit.completedToday) "¡Cumplido Hoy! ✓" else "Registrar Hoy",
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold)
                 )
             }
         }

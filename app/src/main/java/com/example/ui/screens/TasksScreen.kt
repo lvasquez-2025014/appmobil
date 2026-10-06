@@ -1,6 +1,7 @@
 package com.example.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -137,30 +138,23 @@ fun TasksScreen(
                 }
             }
 
-            // Completion Filter Chips (Todas, Pendientes, Completadas)
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 4.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                FilterChip(
-                    selected = uiState.taskFilterCompletedOnly == null,
-                    onClick = { viewModel.setTaskCompletionFilter(null) },
-                    label = { Text("Todas ($totalCount)") },
-                    modifier = Modifier.testTag("filter_all_tasks")
-                )
-                FilterChip(
-                    selected = uiState.taskFilterCompletedOnly == false,
-                    onClick = { viewModel.setTaskCompletionFilter(false) },
-                    label = { Text("Pendientes (${totalCount - completedCount})") },
-                    modifier = Modifier.testTag("filter_pending_tasks")
-                )
-                FilterChip(
-                    selected = uiState.taskFilterCompletedOnly == true,
-                    onClick = { viewModel.setTaskCompletionFilter(true) },
-                    label = { Text("Listas ($completedCount)") },
-                    modifier = Modifier.testTag("filter_completed_tasks")
+            // Apple Segmented Control for Task Completion Filter
+            val completionSelectedIndex = when (uiState.taskFilterCompletedOnly) {
+                null -> 0
+                false -> 1
+                true -> 2
+            }
+            Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
+                com.example.ui.components.AppleSegmentedControl(
+                    options = listOf("Todas ($totalCount)", "Pendientes (${totalCount - completedCount})", "Listas ($completedCount)"),
+                    selectedIndex = completionSelectedIndex,
+                    onSelectIndex = { idx ->
+                        when (idx) {
+                            0 -> viewModel.setTaskCompletionFilter(null)
+                            1 -> viewModel.setTaskCompletionFilter(false)
+                            2 -> viewModel.setTaskCompletionFilter(true)
+                        }
+                    }
                 )
             }
 
@@ -256,14 +250,19 @@ fun FullTaskItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(18.dp))
+            .clip(RoundedCornerShape(16.dp))
+            .border(
+                width = 0.5.dp,
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
+                shape = RoundedCornerShape(16.dp)
+            )
             .clickable { onToggle() }
             .testTag("full_task_${task.id}"),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = if (task.isCompleted) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f) else MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
             modifier = Modifier
@@ -273,13 +272,13 @@ fun FullTaskItem(
         ) {
             IconButton(
                 onClick = onToggle,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(36.dp)
             ) {
                 Icon(
                     imageVector = if (task.isCompleted) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked,
                     contentDescription = "Estado de tarea",
-                    tint = if (task.isCompleted) Color(0xFF10B981) else MaterialTheme.colorScheme.outline,
-                    modifier = Modifier.size(26.dp)
+                    tint = if (task.isCompleted) com.example.ui.theme.AppleSystemGreen else MaterialTheme.colorScheme.outline,
+                    modifier = Modifier.size(24.dp)
                 )
             }
             Spacer(modifier = Modifier.width(10.dp))
@@ -303,7 +302,7 @@ fun FullTaskItem(
                     ) {
                         Text(
                             text = task.category.label,
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
@@ -315,7 +314,7 @@ fun FullTaskItem(
                     ) {
                         Text(
                             text = task.priority.label,
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
                             color = Color(task.priority.colorHex)
                         )
                     }
@@ -333,7 +332,7 @@ fun FullTaskItem(
                 Icon(
                     imageVector = Icons.Default.DeleteOutline,
                     contentDescription = "Eliminar tarea",
-                    tint = MaterialTheme.colorScheme.outline
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )
             }
         }

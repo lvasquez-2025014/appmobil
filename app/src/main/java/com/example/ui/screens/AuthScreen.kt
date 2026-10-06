@@ -1,6 +1,7 @@
 package com.example.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,26 +55,23 @@ fun AuthScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF1E1B4B),
-                        Color(0xFF312E81),
-                        Color(0xFF0F172A)
-                    )
-                )
-            )
+            .background(MaterialTheme.colorScheme.background)
             .padding(24.dp),
         contentAlignment = Alignment.Center
     ) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(28.dp))
+                .clip(RoundedCornerShape(24.dp))
+                .border(
+                    width = 0.5.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
+                    shape = RoundedCornerShape(24.dp)
+                )
                 .testTag("auth_card"),
-            shape = RoundedCornerShape(28.dp),
+            shape = RoundedCornerShape(24.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -85,11 +83,11 @@ fun AuthScreen(
                 // App Logo Badge
                 Box(
                     modifier = Modifier
-                        .size(68.dp)
-                        .clip(CircleShape)
+                        .size(64.dp)
+                        .clip(RoundedCornerShape(16.dp))
                         .background(
                             Brush.linearGradient(
-                                colors = listOf(Color(0xFF4F46E5), Color(0xFF0EA5E9))
+                                colors = listOf(com.example.ui.theme.AppleSystemBlue, com.example.ui.theme.AppleSystemIndigo)
                             )
                         ),
                     contentAlignment = Alignment.Center
@@ -98,14 +96,15 @@ fun AuthScreen(
                         imageVector = Icons.Default.AutoAwesome,
                         contentDescription = "Espacio Logo",
                         tint = Color.White,
-                        modifier = Modifier.size(34.dp)
+                        modifier = Modifier.size(32.dp)
                     )
                 }
 
                 Text(
                     text = "Bienvenido a Espacio",
                     style = MaterialTheme.typography.headlineSmall.copy(
-                        fontWeight = FontWeight.ExtraBold,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = (-0.5).sp,
                         fontSize = 24.sp
                     ),
                     color = MaterialTheme.colorScheme.onSurface,
@@ -113,7 +112,7 @@ fun AuthScreen(
                 )
 
                 Text(
-                    text = "Tu super app móvil con sincronización en la nube (Firestore) y las capacidades de Gemini AI.",
+                    text = "Tu app personal con diseño iOS, sincronización en tiempo real y asistencia multimodal.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -128,18 +127,18 @@ fun AuthScreen(
                 ) {
                     AuthFeatureRow(
                         icon = Icons.Default.CloudSync,
-                        title = "Base de datos Firestore",
+                        title = "Base de datos en la nube",
                         subtitle = "Sincroniza tus tareas, hábitos y finanzas"
                     )
                     AuthFeatureRow(
                         icon = Icons.Default.AutoAwesome,
                         title = "Inteligencia Artificial Gemini",
-                        subtitle = "Chatbot, Veo 3 videos, Lyria música e imágenes"
+                        subtitle = "Chatbot, generación de imágenes, voz y notas"
                     )
                     AuthFeatureRow(
                         icon = Icons.Default.Security,
                         title = "Autenticación Segura",
-                        subtitle = "Protegido con Google Sign-In"
+                        subtitle = "Inicio de sesión seguro con Google"
                     )
                 }
 
@@ -150,18 +149,18 @@ fun AuthScreen(
                     onClick = { viewModel.signInWithGoogle(context) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(52.dp)
+                        .height(50.dp)
                         .testTag("google_signin_button"),
                     shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF4F46E5),
+                        containerColor = com.example.ui.theme.AppleSystemBlue,
                         contentColor = Color.White
                     ),
                     enabled = !isLoading
                 ) {
                     if (isLoading) {
                         CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
+                            modifier = Modifier.size(22.dp),
                             color = Color.White,
                             strokeWidth = 2.dp
                         )
@@ -172,13 +171,13 @@ fun AuthScreen(
                         ) {
                             Text(
                                 text = "G",
-                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                                 color = Color.White
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
-                                text = "Iniciar sesión con Google",
-                                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+                                text = "Continuar con Google",
+                                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold)
                             )
                         }
                     }
@@ -191,11 +190,14 @@ fun AuthScreen(
                         .fillMaxWidth()
                         .height(48.dp)
                         .testTag("continue_as_guest_button"),
-                    shape = RoundedCornerShape(14.dp)
+                    shape = RoundedCornerShape(14.dp),
+                    colors = androidx.compose.material3.ButtonDefaults.outlinedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    )
                 ) {
                     Text(
-                        text = "Explorar en Modo Demo",
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                        text = "Explorar sin cuenta (Modo Local)",
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium)
                     )
                 }
             }

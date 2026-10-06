@@ -1,6 +1,7 @@
 package com.example.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,10 +24,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.material.icons.filled.Description
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material.icons.filled.WaterDrop
@@ -34,11 +35,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SuggestionChip
-import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -66,6 +66,10 @@ import com.example.ui.components.AddTaskDialog
 import com.example.ui.components.AddTransactionDialog
 import com.example.ui.components.SectionHeader
 import com.example.ui.components.StatOverviewCard
+import com.example.ui.theme.AppleSystemBlue
+import com.example.ui.theme.AppleSystemGreen
+import com.example.ui.theme.AppleSystemOrange
+import com.example.ui.theme.AppleSystemPurple
 import com.example.ui.viewmodel.EspacioUiState
 import com.example.ui.viewmodel.EspacioViewModel
 import java.util.Locale
@@ -92,31 +96,53 @@ fun HomeScreen(
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .testTag("home_screen_lazy_column"),
-        contentPadding = PaddingValues(bottom = 96.dp)
+        contentPadding = PaddingValues(bottom = 100.dp)
     ) {
-        // Hero Header Card
+        // iOS Large Title Header
         item {
-            HeroHeaderCard(
-                onExploreCreatorClick = { viewModel.navigateTo(AppNavDestination.CREATOR) }
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 12.dp)
+            ) {
+                Text(
+                    text = "LUNES, 6 DE OCTUBRE",
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        letterSpacing = 0.8.sp
+                    ),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = "Mi Espacio",
+                    style = MaterialTheme.typography.headlineLarge.copy(
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 34.sp,
+                        letterSpacing = (-0.8).sp
+                    ),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
         }
 
-        // Quick Stats Row
+        // Apple Widgets (2x2 Grid)
         item {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    .padding(horizontal = 20.dp, vertical = 6.dp),
+                horizontalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 StatOverviewCard(
                     title = "Tareas",
                     value = "$completedTasksCount/$totalTasksCount",
                     subtitle = if (totalTasksCount > 0) "${(completedTasksCount * 100 / totalTasksCount)}% listas" else "0%",
                     icon = Icons.Default.Checklist,
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = AppleSystemBlue,
                     modifier = Modifier.weight(1f),
                     onClick = { viewModel.navigateTo(AppNavDestination.TASKS) }
                 )
@@ -125,8 +151,8 @@ fun HomeScreen(
                     value = "$completedHabitsToday/$totalHabits",
                     subtitle = "Completados hoy",
                     icon = Icons.Default.LocalFireDepartment,
-                    containerColor = Color(0xFFFEF3C7),
-                    contentColor = Color(0xFF92400E),
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = AppleSystemOrange,
                     modifier = Modifier.weight(1f),
                     onClick = { viewModel.navigateTo(AppNavDestination.HABITS) }
                 )
@@ -137,16 +163,16 @@ fun HomeScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 4.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    .padding(horizontal = 20.dp, vertical = 6.dp),
+                horizontalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 StatOverviewCard(
                     title = "Balance",
                     value = "$${String.format(Locale.US, "%.0f", totalBalance)}",
-                    subtitle = "Saldo actual",
+                    subtitle = "Saldo disponible",
                     icon = Icons.Default.AccountBalanceWallet,
-                    containerColor = Color(0xFFDCFCE7),
-                    contentColor = Color(0xFF166534),
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = AppleSystemGreen,
                     modifier = Modifier.weight(1f),
                     onClick = { viewModel.navigateTo(AppNavDestination.FINANCES) }
                 )
@@ -155,106 +181,108 @@ fun HomeScreen(
                     value = "${uiState.notes.size}",
                     subtitle = "Guardadas",
                     icon = Icons.Default.Description,
-                    containerColor = Color(0xFFE0E7FF),
-                    contentColor = Color(0xFF3730A3),
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = AppleSystemPurple,
                     modifier = Modifier.weight(1f),
                     onClick = { viewModel.navigateTo(AppNavDestination.NOTES) }
                 )
             }
         }
 
-        // Quick Action Buttons
+        // Apple Quick Action Pills
         item {
+            Spacer(modifier = Modifier.height(14.dp))
             SectionHeader(title = "Acciones Rápidas")
             LazyRow(
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.padding(bottom = 8.dp)
+                contentPadding = PaddingValues(horizontal = 20.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.padding(bottom = 10.dp)
             ) {
                 item {
-                    ActionChip(
+                    AppleActionPill(
                         label = "✨ Gemini IA Studio",
-                        isHighlighted = true,
+                        isAccent = true,
                         onClick = { viewModel.navigateTo(AppNavDestination.AI_STUDIO) },
                         tag = "chip_gemini_ai_studio"
                     )
                 }
                 item {
-                    ActionChip(
+                    AppleActionPill(
                         label = "+ Tarea",
                         onClick = { showAddTaskDialog = true },
                         tag = "chip_add_task"
                     )
                 }
                 item {
-                    ActionChip(
+                    AppleActionPill(
                         label = "+ Hábito",
                         onClick = { showAddHabitDialog = true },
                         tag = "chip_add_habit"
                     )
                 }
                 item {
-                    ActionChip(
+                    AppleActionPill(
                         label = "+ Movimiento",
                         onClick = { showAddTxDialog = true },
                         tag = "chip_add_tx"
                     )
                 }
                 item {
-                    ActionChip(
+                    AppleActionPill(
                         label = "+ Nota",
                         onClick = { showAddNoteDialog = true },
                         tag = "chip_add_note"
                     )
                 }
-                item {
-                    ActionChip(
-                        label = "✨ Taller de Apps",
-                        isHighlighted = true,
-                        onClick = { viewModel.navigateTo(AppNavDestination.CREATOR) },
-                        tag = "chip_app_creator"
-                    )
-                }
             }
         }
 
-        // Section: Today's Tasks
+        // Inset Grouped: Tareas Pendientes (Apple iOS style)
         item {
+            Spacer(modifier = Modifier.height(8.dp))
             SectionHeader(
-                title = "Tareas Pendientes",
-                subtitle = "Toca para marcar como completada",
+                title = "Tareas de Hoy",
                 actionText = "Ver todas",
                 onActionClick = { viewModel.navigateTo(AppNavDestination.TASKS) }
             )
         }
 
         val pendingTasks = uiState.tasks.filter { !it.isCompleted }.take(4)
-        if (pendingTasks.isEmpty()) {
-            item {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 6.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
+        item {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 4.dp)
+                    .border(0.5.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.4f), RoundedCornerShape(18.dp)),
+                shape = RoundedCornerShape(18.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+            ) {
+                if (pendingTasks.isEmpty()) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(24.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.CheckCircle,
-                            contentDescription = null,
-                            tint = Color(0xFF10B981),
-                            modifier = Modifier.size(36.dp)
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Box(
+                            modifier = Modifier
+                                .size(44.dp)
+                                .clip(CircleShape)
+                                .background(AppleSystemGreen.copy(alpha = 0.15f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = null,
+                                tint = AppleSystemGreen,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(10.dp))
                         Text(
-                            text = "¡Todo al día!",
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.titleMedium
+                            text = "Todo al día",
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                         )
                         Text(
                             text = "No tienes tareas pendientes urgentes.",
@@ -262,23 +290,31 @@ fun HomeScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
+                } else {
+                    Column {
+                        pendingTasks.forEachIndexed { index, task ->
+                            AppleTaskRow(
+                                task = task,
+                                onToggle = { viewModel.toggleTask(task.id) }
+                            )
+                            if (index < pendingTasks.size - 1) {
+                                HorizontalDivider(
+                                    modifier = Modifier.padding(start = 56.dp),
+                                    thickness = 0.5.dp,
+                                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
+                                )
+                            }
+                        }
+                    }
                 }
-            }
-        } else {
-            items(pendingTasks, key = { it.id }) { task ->
-                HomeTaskItem(
-                    task = task,
-                    onToggle = { viewModel.toggleTask(task.id) }
-                )
             }
         }
 
-        // Section: Habits Streaks
+        // Section: Habits Carousel
         item {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(14.dp))
             SectionHeader(
                 title = "Hábitos en Racha",
-                subtitle = "Mantén la constancia día a día",
                 actionText = "Ver todos",
                 onActionClick = { viewModel.navigateTo(AppNavDestination.HABITS) }
             )
@@ -286,11 +322,11 @@ fun HomeScreen(
 
         item {
             LazyRow(
-                contentPadding = PaddingValues(horizontal = 16.dp),
+                contentPadding = PaddingValues(horizontal = 20.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(uiState.habits, key = { it.id }) { habit ->
-                    HomeHabitCard(
+                    AppleHabitCard(
                         habit = habit,
                         onToggle = { viewModel.toggleHabitToday(habit.id) }
                     )
@@ -298,30 +334,33 @@ fun HomeScreen(
             }
         }
 
-        // Section: Workshop Callout
+        // Apple Hero Banner (Gemini AI Studio)
         item {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(18.dp))
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(24.dp))
-                    .clickable { viewModel.navigateTo(AppNavDestination.CREATOR) }
-                    .testTag("workshop_callout_banner"),
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
+                    .padding(horizontal = 20.dp)
+                    .clip(RoundedCornerShape(22.dp))
+                    .clickable { viewModel.navigateTo(AppNavDestination.AI_STUDIO) }
+                    .testTag("gemini_studio_callout_banner"),
+                shape = RoundedCornerShape(22.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.Black),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            Brush.horizontalGradient(
-                                colors = listOf(Color(0xFF4F46E5), Color(0xFF7C3AED), Color(0xFF0EA5E9))
+                            Brush.linearGradient(
+                                colors = listOf(
+                                    Color(0xFF007AFF),
+                                    Color(0xFF5856D6),
+                                    Color(0xFFAF52DE)
+                                )
                             )
                         )
-                        .padding(20.dp)
+                        .padding(22.dp)
                 ) {
                     Column {
                         Row(
@@ -332,7 +371,7 @@ fun HomeScreen(
                                 modifier = Modifier
                                     .size(32.dp)
                                     .clip(CircleShape)
-                                    .background(Color.White.copy(alpha = 0.2f)),
+                                    .background(Color.White.copy(alpha = 0.25f)),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(
@@ -343,40 +382,44 @@ fun HomeScreen(
                                 )
                             }
                             Text(
-                                text = "¿QUÉ APP QUIERES CREAR?",
+                                text = "GEMINI MULTIMODAL",
                                 style = MaterialTheme.typography.labelMedium.copy(
                                     fontWeight = FontWeight.Bold,
-                                    letterSpacing = 1.2.sp
+                                    letterSpacing = 1.sp
                                 ),
                                 color = Color.White.copy(alpha = 0.9f)
                             )
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(10.dp))
                         Text(
-                            text = "Diseña y personaliza tu propia app móvil",
+                            text = "Estudio de Inteligencia Artificial",
                             style = MaterialTheme.typography.titleLarge.copy(
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 22.sp,
+                                letterSpacing = (-0.4).sp
                             ),
                             color = Color.White
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "Explora plantillas para tiendas, fitness, finanzas o describe lo que imaginas. ¡Lo programamos juntos!",
+                            text = "Chatbot con roles, videos con Veo 3, música con Lyria, búsqueda en vivo y transcripción de voz.",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color.White.copy(alpha = 0.85f)
+                            color = Color.White.copy(alpha = 0.9f)
                         )
-                        Spacer(modifier = Modifier.height(14.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
                         Button(
-                            onClick = { viewModel.navigateTo(AppNavDestination.CREATOR) },
+                            onClick = { viewModel.navigateTo(AppNavDestination.AI_STUDIO) },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color.White,
-                                contentColor = Color(0xFF4F46E5)
+                                contentColor = AppleSystemBlue
                             ),
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(12.dp),
+                            elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                         ) {
                             Text(
-                                text = "Abrir Taller de Apps",
-                                fontWeight = FontWeight.Bold
+                                text = "Abrir Estudio IA",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp
                             )
                             Spacer(modifier = Modifier.width(6.dp))
                             Icon(
@@ -418,166 +461,114 @@ fun HomeScreen(
     }
 }
 
+// Apple iOS Pill Button
 @Composable
-fun HeroHeaderCard(onExploreCreatorClick: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f))
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = "¡HOLA! 👋",
-                    style = MaterialTheme.typography.labelMedium.copy(
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp
-                    ),
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Bienvenido a tu App",
-                    style = MaterialTheme.typography.headlineMedium.copy(
-                        fontWeight = FontWeight.ExtraBold
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Todo organizado en un solo lugar: tareas, hábitos, gastos y notas.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ActionChip(
+fun AppleActionPill(
     label: String,
     onClick: () -> Unit,
     tag: String,
-    isHighlighted: Boolean = false
+    isAccent: Boolean = false
 ) {
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(14.dp),
-        color = if (isHighlighted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
-        tonalElevation = 2.dp,
+        color = if (isAccent) AppleSystemBlue else MaterialTheme.colorScheme.surface,
+        border = if (isAccent) null else androidx.compose.foundation.BorderStroke(0.5.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
         modifier = Modifier.testTag(tag)
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 9.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelLarge.copy(
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 13.sp
                 ),
-                color = if (isHighlighted) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+                color = if (isAccent) Color.White else MaterialTheme.colorScheme.primary
             )
         }
     }
 }
 
+// Apple Inset Row
 @Composable
-fun HomeTaskItem(
+fun AppleTaskRow(
     task: TaskItem,
     onToggle: () -> Unit
 ) {
-    Card(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp)
-            .clip(RoundedCornerShape(16.dp))
             .clickable { onToggle() }
-            .testTag("task_item_${task.id}"),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+            .padding(horizontal = 14.dp, vertical = 12.dp)
+            .testTag("task_row_${task.id}"),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically
+        IconButton(
+            onClick = onToggle,
+            modifier = Modifier.size(32.dp)
         ) {
-            IconButton(
-                onClick = onToggle,
-                modifier = Modifier.size(36.dp)
-            ) {
-                Icon(
-                    imageVector = if (task.isCompleted) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked,
-                    contentDescription = "Completar tarea",
-                    tint = if (task.isCompleted) Color(0xFF10B981) else MaterialTheme.colorScheme.outline
-                )
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            Column(modifier = Modifier.weight(1f)) {
+            Icon(
+                imageVector = if (task.isCompleted) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked,
+                contentDescription = null,
+                tint = if (task.isCompleted) AppleSystemGreen else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                modifier = Modifier.size(24.dp)
+            )
+        }
+        Spacer(modifier = Modifier.width(10.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = task.title,
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 16.sp
+                ),
+                textDecoration = if (task.isCompleted) TextDecoration.LineThrough else TextDecoration.None,
+                color = if (task.isCompleted) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(
-                    text = task.title,
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    textDecoration = if (task.isCompleted) TextDecoration.LineThrough else TextDecoration.None,
-                    color = if (task.isCompleted) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    text = task.category.label,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary
                 )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = task.category.label,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Text(
-                        text = "•",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.outline
-                    )
-                    Text(
-                        text = task.priority.label,
-                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                        color = Color(task.priority.colorHex)
-                    )
-                }
+                Text(
+                    text = "•",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = task.priority.label,
+                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = Color(task.priority.colorHex)
+                )
             }
         }
     }
 }
 
+// Apple Habit Card
 @Composable
-fun HomeHabitCard(
+fun AppleHabitCard(
     habit: HabitItem,
     onToggle: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .width(160.dp)
-            .clip(RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(18.dp))
+            .border(0.5.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.4f), RoundedCornerShape(18.dp))
             .clickable { onToggle() }
             .testTag("habit_card_${habit.id}"),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(14.dp)
-        ) {
+        Column(modifier = Modifier.padding(14.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -586,7 +577,7 @@ fun HomeHabitCard(
                 Box(
                     modifier = Modifier
                         .size(34.dp)
-                        .clip(CircleShape)
+                        .clip(RoundedCornerShape(8.dp))
                         .background(Color(habit.colorHex).copy(alpha = 0.15f)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -600,14 +591,14 @@ fun HomeHabitCard(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Default.LocalFireDepartment,
-                        contentDescription = "Racha",
-                        tint = Color(0xFFF59E0B),
+                        contentDescription = null,
+                        tint = AppleSystemOrange,
                         modifier = Modifier.size(16.dp)
                     )
                     Text(
                         text = "${habit.streak}d",
                         style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                        color = Color(0xFFF59E0B)
+                        color = AppleSystemOrange
                     )
                 }
             }
@@ -618,10 +609,9 @@ fun HomeHabitCard(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "${habit.completedDaysThisWeek}/${habit.targetDaysPerWeek} días",
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.height(10.dp))
@@ -629,13 +619,14 @@ fun HomeHabitCard(
                 onClick = onToggle,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (habit.completedToday) Color(0xFF10B981) else MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = if (habit.completedToday) Color.White else MaterialTheme.colorScheme.onPrimaryContainer
+                    containerColor = if (habit.completedToday) AppleSystemGreen else MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = if (habit.completedToday) Color.White else MaterialTheme.colorScheme.primary
                 ),
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(10.dp),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
             ) {
                 Text(
-                    text = if (habit.completedToday) "¡Listo! ✓" else "Completar",
+                    text = if (habit.completedToday) "Listo ✓" else "Completar",
                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold)
                 )
             }

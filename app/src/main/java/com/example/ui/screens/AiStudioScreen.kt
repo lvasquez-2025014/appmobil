@@ -81,26 +81,13 @@ fun AiStudioScreen(
             .fillMaxSize()
             .testTag("ai_studio_screen")
     ) {
-        // Tab Selector Row
-        ScrollableTabRow(
-            selectedTabIndex = uiState.aiSelectedTab.ordinal,
-            edgePadding = 16.dp,
-            containerColor = MaterialTheme.colorScheme.background,
-            contentColor = MaterialTheme.colorScheme.primary
-        ) {
-            AiStudioTab.values().forEach { tab ->
-                Tab(
-                    selected = uiState.aiSelectedTab == tab,
-                    onClick = { viewModel.setAiStudioTab(tab) },
-                    text = {
-                        Text(
-                            text = tab.label,
-                            fontWeight = if (uiState.aiSelectedTab == tab) FontWeight.Bold else FontWeight.Normal
-                        )
-                    },
-                    modifier = Modifier.testTag("ai_tab_${tab.name}")
-                )
-            }
+        // Apple Segmented Control Tab Row
+        Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+            com.example.ui.components.AppleSegmentedControl(
+                options = listOf("Chat", "Búsqueda & Mapas", "Imágenes & Veo", "Música & Voz"),
+                selectedIndex = uiState.aiSelectedTab.ordinal,
+                onSelectIndex = { viewModel.setAiStudioTab(AiStudioTab.values()[it]) }
+            )
         }
 
         when (uiState.aiSelectedTab) {

@@ -1,6 +1,7 @@
 package com.example.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,9 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -29,7 +28,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
@@ -38,7 +36,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -58,6 +55,7 @@ import com.example.data.model.ExpenseCategory
 import com.example.data.model.Priority
 import com.example.data.model.TaskCategory
 
+// Classic Apple iOS Inset Grouped Section Header
 @Composable
 fun SectionHeader(
     title: String,
@@ -69,24 +67,25 @@ fun SectionHeader(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 20.dp, vertical = 6.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
+                text = title.uppercase(),
+                style = MaterialTheme.typography.labelMedium.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 12.sp,
+                    letterSpacing = 0.8.sp
                 ),
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             if (subtitle != null) {
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
                 )
             }
         }
@@ -98,13 +97,15 @@ fun SectionHeader(
                 Text(
                     text = actionText,
                     color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp
                 )
             }
         }
     }
 }
 
+// Apple iOS Widget Style Overview Card
 @Composable
 fun StatOverviewCard(
     title: String,
@@ -119,10 +120,11 @@ fun StatOverviewCard(
     Card(
         modifier = modifier
             .clip(RoundedCornerShape(20.dp))
+            .border(0.5.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(20.dp))
             .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = containerColor),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -134,39 +136,80 @@ fun StatOverviewCard(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(38.dp)
-                        .clip(CircleShape)
-                        .background(contentColor.copy(alpha = 0.15f)),
+                        .size(36.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(contentColor),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        tint = contentColor,
+                        tint = Color.White,
                         modifier = Modifier.size(20.dp)
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(14.dp))
             Text(
                 text = value,
-                style = MaterialTheme.typography.headlineSmall.copy(
+                style = MaterialTheme.typography.headlineMedium.copy(
                     fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp
+                    fontSize = 24.sp,
+                    letterSpacing = (-0.5).sp
                 ),
-                color = contentColor
+                color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = title,
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
-                color = contentColor.copy(alpha = 0.85f)
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                color = MaterialTheme.colorScheme.onSurface
             )
             Text(
                 text = subtitle,
-                style = MaterialTheme.typography.labelSmall,
-                color = contentColor.copy(alpha = 0.7f)
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+        }
+    }
+}
+
+// Apple Segmented Control
+@Composable
+fun AppleSegmentedControl(
+    options: List<String>,
+    selectedIndex: Int,
+    onSelectIndex: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .padding(2.dp),
+        horizontalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        options.forEachIndexed { index, option ->
+            val isSelected = selectedIndex == index
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(if (isSelected) MaterialTheme.colorScheme.surface else Color.Transparent)
+                    .clickable { onSelectIndex(index) }
+                    .padding(vertical = 8.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = option,
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                        fontSize = 13.sp
+                    ),
+                    color = if (isSelected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }
@@ -185,13 +228,14 @@ fun AddTaskDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Nueva Tarea", fontWeight = FontWeight.Bold) },
+        shape = RoundedCornerShape(22.dp),
+        title = { Text("Nueva Tarea", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge) },
         text = {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 OutlinedTextField(
                     value = title,
@@ -199,12 +243,12 @@ fun AddTaskDialog(
                     label = { Text("Título de la tarea") },
                     placeholder = { Text("Ej: Diseñar pantalla de inicio") },
                     singleLine = true,
+                    shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("task_title_input")
                 )
 
-                // Category selector
                 ExposedDropdownMenuBox(
                     expanded = categoryExpanded,
                     onExpandedChange = { categoryExpanded = it }
@@ -215,6 +259,7 @@ fun AddTaskDialog(
                         readOnly = true,
                         label = { Text("Categoría") },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryExpanded) },
+                        shape = RoundedCornerShape(12.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .menuAnchor(MenuAnchorType.PrimaryNotEditable)
@@ -235,8 +280,7 @@ fun AddTaskDialog(
                     }
                 }
 
-                // Priority Selector
-                Text("Prioridad", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
+                Text("Prioridad", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -245,9 +289,9 @@ fun AddTaskDialog(
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
-                                .clip(RoundedCornerShape(8.dp))
+                                .clip(RoundedCornerShape(10.dp))
                                 .clickable { selectedPriority = prio }
-                                .padding(end = 8.dp)
+                                .padding(end = 6.dp)
                         ) {
                             RadioButton(
                                 selected = selectedPriority == prio,
@@ -273,9 +317,11 @@ fun AddTaskDialog(
                     }
                 },
                 enabled = title.isNotBlank(),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 modifier = Modifier.testTag("save_task_button")
             ) {
-                Text("Guardar")
+                Text("Guardar", fontWeight = FontWeight.Bold)
             }
         },
         dismissButton = {
@@ -295,18 +341,19 @@ fun AddHabitDialog(
     var name by remember { mutableStateOf("") }
     var targetDays by remember { mutableIntStateOf(7) }
     val colorOptions = listOf(
-        0xFF4F46E5, // Indigo
-        0xFF0EA5E9, // Sky
-        0xFF10B981, // Emerald
-        0xFFF59E0B, // Amber
-        0xFFEC4899, // Pink
-        0xFF8B5CF6  // Purple
+        0xFF007AFF, // Apple Blue
+        0xFF34C759, // Apple Green
+        0xFFFF9500, // Apple Orange
+        0xFFAF52DE, // Apple Purple
+        0xFFFF2D55, // Apple Pink
+        0xFF5856D6  // Apple Indigo
     )
     var selectedColor by remember { mutableLongStateOf(colorOptions[0]) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Nuevo Hábito", fontWeight = FontWeight.Bold) },
+        shape = RoundedCornerShape(22.dp),
+        title = { Text("Nuevo Hábito", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge) },
         text = {
             Column(
                 modifier = Modifier
@@ -320,12 +367,13 @@ fun AddHabitDialog(
                     label = { Text("Nombre del hábito") },
                     placeholder = { Text("Ej: Meditar 10 minutos") },
                     singleLine = true,
+                    shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("habit_name_input")
                 )
 
-                Text("Meta semanal: $targetDays días a la semana", style = MaterialTheme.typography.bodyMedium)
+                Text("Frecuencia: $targetDays días a la semana", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -335,16 +383,16 @@ fun AddHabitDialog(
                             onClick = { targetDays = days },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = if (targetDays == days) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
-                                contentColor = if (targetDays == days) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+                                contentColor = if (targetDays == days) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
                             ),
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(10.dp)
                         ) {
                             Text("$days d")
                         }
                     }
                 }
 
-                Text("Color de distinción", style = MaterialTheme.typography.bodyMedium)
+                Text("Color de distinción", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
@@ -380,9 +428,11 @@ fun AddHabitDialog(
                     }
                 },
                 enabled = name.isNotBlank(),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 modifier = Modifier.testTag("save_habit_button")
             ) {
-                Text("Crear Hábito")
+                Text("Crear", fontWeight = FontWeight.Bold)
             }
         },
         dismissButton = {
@@ -408,42 +458,37 @@ fun AddTransactionDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(if (isIncome) "Nuevo Ingreso" else "Nuevo Gasto", fontWeight = FontWeight.Bold) },
+        shape = RoundedCornerShape(22.dp),
+        title = { Text(if (isIncome) "Nuevo Ingreso" else "Nuevo Gasto", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge) },
         text = {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Button(
-                        onClick = {
-                            isIncome = false
-                            if (selectedCategory == ExpenseCategory.TRABAJO) {
-                                selectedCategory = ExpenseCategory.COMIDA
-                            }
-                        },
+                        onClick = { isIncome = false },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = if (!isIncome) Color(0xFFEF4444) else MaterialTheme.colorScheme.surfaceVariant,
+                            containerColor = if (!isIncome) Color(0xFFFF3B30) else MaterialTheme.colorScheme.surfaceVariant,
                             contentColor = if (!isIncome) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
                         ),
+                        shape = RoundedCornerShape(10.dp),
                         modifier = Modifier.weight(1f)
                     ) {
                         Text("Gasto (-)")
                     }
                     Button(
-                        onClick = {
-                            isIncome = true
-                            selectedCategory = ExpenseCategory.TRABAJO
-                        },
+                        onClick = { isIncome = true },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = if (isIncome) Color(0xFF10B981) else MaterialTheme.colorScheme.surfaceVariant,
+                            containerColor = if (isIncome) Color(0xFF34C759) else MaterialTheme.colorScheme.surfaceVariant,
                             contentColor = if (isIncome) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
                         ),
+                        shape = RoundedCornerShape(10.dp),
                         modifier = Modifier.weight(1f)
                     ) {
                         Text("Ingreso (+)")
@@ -453,12 +498,11 @@ fun AddTransactionDialog(
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
-                    label = { Text("Concepto / Descripción") },
+                    label = { Text("Concepto") },
                     placeholder = { Text("Ej: Supermercado o Salario") },
                     singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("transaction_concept_input")
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 OutlinedTextField(
@@ -468,9 +512,8 @@ fun AddTransactionDialog(
                     placeholder = { Text("0.00") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("transaction_amount_input")
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 ExposedDropdownMenuBox(
@@ -483,6 +526,7 @@ fun AddTransactionDialog(
                         readOnly = true,
                         label = { Text("Categoría") },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryExpanded) },
+                        shape = RoundedCornerShape(12.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .menuAnchor(MenuAnchorType.PrimaryNotEditable)
@@ -514,9 +558,10 @@ fun AddTransactionDialog(
                     }
                 },
                 enabled = title.isNotBlank() && (amountString.toDoubleOrNull() ?: 0.0) > 0.0,
-                modifier = Modifier.testTag("save_transaction_button")
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
-                Text("Registrar")
+                Text("Registrar", fontWeight = FontWeight.Bold)
             }
         },
         dismissButton = {
@@ -536,48 +581,47 @@ fun AddNoteDialog(
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
     val noteColors = listOf(
-        0xFFFEF3C7, // Warm Amber
-        0xFFDCFCE7, // Mint green
-        0xFFE0E7FF, // Soft Indigo
-        0xFFFCE7F3, // Soft Pink
-        0xFFCFFAFE  // Light Cyan
+        0xFFFFFFFF, // Pure Apple White
+        0xFFF2F2F7, // Apple Gray
+        0xFFE5F1FF, // Apple Light Blue
+        0xFFEDF9F0, // Apple Light Mint
+        0xFFFFF4E5  // Apple Light Orange
     )
     var selectedColor by remember { mutableLongStateOf(noteColors[0]) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Nueva Nota", fontWeight = FontWeight.Bold) },
+        shape = RoundedCornerShape(22.dp),
+        title = { Text("Nueva Nota", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge) },
         text = {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
                     label = { Text("Título") },
-                    placeholder = { Text("Ej: Lista de ideas") },
+                    placeholder = { Text("Ej: Ideas de diseño") },
                     singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("note_title_input")
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 OutlinedTextField(
                     value = content,
                     onValueChange = { content = it },
                     label = { Text("Contenido") },
-                    placeholder = { Text("Escribe lo que quieras recordar...") },
+                    placeholder = { Text("Escribe una nota rápida...") },
                     minLines = 3,
                     maxLines = 6,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("note_content_input")
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth()
                 )
 
-                Text("Color de la tarjeta", style = MaterialTheme.typography.bodyMedium)
+                Text("Tonalidad", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
@@ -588,6 +632,7 @@ fun AddNoteDialog(
                                 .size(34.dp)
                                 .clip(CircleShape)
                                 .background(Color(col))
+                                .border(1.dp, Color(0xFFD1D1D6), CircleShape)
                                 .clickable { selectedColor = col },
                             contentAlignment = Alignment.Center
                         ) {
@@ -595,7 +640,7 @@ fun AddNoteDialog(
                                 Icon(
                                     imageVector = Icons.Default.Check,
                                     contentDescription = "Seleccionado",
-                                    tint = Color(0xFF1E293B),
+                                    tint = Color(0xFF007AFF),
                                     modifier = Modifier.size(18.dp)
                                 )
                             }
@@ -613,9 +658,10 @@ fun AddNoteDialog(
                     }
                 },
                 enabled = title.isNotBlank() || content.isNotBlank(),
-                modifier = Modifier.testTag("save_note_button")
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
-                Text("Guardar Nota")
+                Text("Guardar", fontWeight = FontWeight.Bold)
             }
         },
         dismissButton = {
