@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Glow effect behind center shape -->
+    <path
+        android:fillColor="#3360A5FA"
+        android:pathData="M54,28 C68.36,28 80,39.64 80,54 C80,68.36 68.36,80 54,80 C39.64,80 28,68.36 28,54 C28,39.64 39.64,28 54,28 Z" />
+
+    <!-- Stylized Modern Smartphone Body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M41,27 C37.69,27 35,29.69 35,33 L35,75 C35,78.31 37.69,81 41,81 L67,81 C70.31,81 73,78.31 73,75 L73,33 C73,29.69 70.31,27 67,27 L41,27 Z M67,76 L41,76 C40.45,76 40,75.55 40,75 L40,33 C40,32.45 40.45,32 41,32 L67,32 C67.55,32 68,32.45 68,33 L68,75 C68,75.55 67.55,76 67,76 Z" />
+
+    <!-- Speaker Bar / Notch -->
+    <path
+        android:fillColor="#818CF8"
+        android:pathData="M49,30 C49,29.45 49.45,29 50,29 L58,29 C58.55,29 59,29.45 59,30 C59,30.55 58.55,31 58,31 L50,31 C49.45,31 49,30.55 49,30 Z" />
+
+    <!-- App Screen Dynamic Blocks / Cards -->
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M43,36 L65,36 C65.55,36 66,36.45 66,37 L66,45 C66,45.55 65.55,46 65,46 L43,46 C42.45,46 42,45.55 42,45 L42,37 C42,36.45 42.45,36 43,36 Z" />
+    <path
+        android:fillColor="#818CF8"
+        android:pathData="M43,49 L52,49 C52.55,49 53,49.45 53,50 L53,59 C53,59.55 52.55,60 52,60 L43,60 C42.45,60 42,59.55 42,59 L42,50 C42,49.45 42.45,49 43,49 Z" />
+    <path
+        android:fillColor="#F472B6"
+        android:pathData="M56,49 L65,49 C65.55,49 66,49.45 66,50 L66,59 C66,59.55 65.55,60 65,60 L56,60 C55.45,60 55,59.55 55,59 L55,50 C55,49.45 55.45,49 56,49 Z" />
+
+    <!-- Home indicator bar -->
+    <path
+        android:fillColor="#818CF8"
+        android:pathData="M50,72 C50,71.45 50.45,71 51,71 L57,71 C57.55,71 58,71.45 58,72 C58,72.55 57.55,73 57,73 L51,73 C50.45,73 50,72.55 50,72 Z" />
+
+    <!-- Sparkling Star Accent (Top-Right) -->
+    <path
+        android:fillColor="#FBBF24"
+        android:pathData="M74,32 C74,34 76,36 78,36 C76,36 74,38 74,40 C74,38 72,36 70,36 C72,36 74,34 74,32 Z" />
+    <!-- Mini Star Accent (Bottom-Left) -->
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M33,64 C33,65.5 34.5,67 36,67 C34.5,67 33,68.5 33,70 C33,68.5 31.5,67 30,67 C31.5,67 33,65.5 33,64 Z" />
+</vector>

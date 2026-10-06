@@ -1,0 +1,63 @@
+{
+  "entities": {
+    "users": {
+      "path": "users/{userId}",
+      "fields": {
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "createdAt": { "type": "timestamp" }
+      }
+    },
+    "tasks": {
+      "path": "users/{userId}/tasks/{taskId}",
+      "fields": {
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "priority": { "type": "string" },
+        "isCompleted": { "type": "boolean" },
+        "dateLabel": { "type": "string" }
+      }
+    },
+    "habits": {
+      "path": "users/{userId}/habits/{habitId}",
+      "fields": {
+        "name": { "type": "string" },
+        "targetDaysPerWeek": { "type": "number" },
+        "completedDaysThisWeek": { "type": "number" },
+        "completedToday": { "type": "boolean" },
+        "streak": { "type": "number" },
+        "colorHex": { "type": "number" }
+      }
+    },
+    "transactions": {
+      "path": "users/{userId}/transactions/{transactionId}",
+      "fields": {
+        "title": { "type": "string" },
+        "amount": { "type": "number" },
+        "isIncome": { "type": "boolean" },
+        "category": { "type": "string" },
+        "dateLabel": { "type": "string" }
+      }
+    },
+    "notes": {
+      "path": "users/{userId}/notes/{noteId}",
+      "fields": {
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "colorHex": { "type": "number" },
+        "isPinned": { "type": "boolean" },
+        "dateLabel": { "type": "string" }
+      }
+    },
+    "ai_creations": {
+      "path": "users/{userId}/ai_creations/{creationId}",
+      "fields": {
+        "type": { "type": "string" },
+        "prompt": { "type": "string" },
+        "result": { "type": "string" },
+        "modelUsed": { "type": "string" },
+        "createdAt": { "type": "timestamp" }
+      }
+    }
+  }
+}
