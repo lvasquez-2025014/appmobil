@@ -37,6 +37,57 @@ jobs:
         if [ ! -f .env.example ]; then
           touch .env.example
         fi
+        if [ ! -f app/google-services.json ]; then
+          cat << 'EOF' > app/google-services.json
+{
+  "project_info": {
+    "project_number": "1097762260600",
+    "project_id": "gen-lang-client-0827314451",
+    "storage_bucket": "gen-lang-client-0827314451.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1097762260600:android:e42c8ce6686a413a6e8f8d",
+        "android_client_info": {
+          "package_name": "com.aistudio.espacio.kqzpt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1097762260600-tbcai7mpoauiuu5p0k89otsmr55tcpfp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aistudio.espacio.kqzpt",
+            "certificate_hash": "f873cb448af44a80d9fa7fe56ef73989e5d80fdf"
+          }
+        },
+        {
+          "client_id": "1097762260600-v3d9oojt1aal4u4t2ila1ggilijpiium.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEcvcSuqdg3xnKDhI-sDd2YPQef5PZNgE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1097762260600-v3d9oojt1aal4u4t2ila1ggilijpiium.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
+EOF
+        fi
 
     - name: Prepare Debug Keystore
       run: |

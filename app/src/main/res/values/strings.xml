@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Espacio</string>
+    <string name="default_web_client_id" translatable="false">1097762260600-v3d9oojt1aal4u4t2ila1ggilijpiium.apps.googleusercontent.com</string>
 </resources>

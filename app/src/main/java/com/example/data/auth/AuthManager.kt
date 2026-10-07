@@ -39,7 +39,11 @@ class AuthManager(
     suspend fun signInWithGoogle(context: Context): Result<FirebaseUser> {
         return try {
             val credentialManager = CredentialManager.create(context)
-            val serverClientId = context.getString(R.string.default_web_client_id)
+            val serverClientId = try {
+                context.getString(R.string.default_web_client_id)
+            } catch (e: Exception) {
+                "1097762260600-v3d9oojt1aal4u4t2ila1ggilijpiium.apps.googleusercontent.com"
+            }
 
             val googleOption = GetSignInWithGoogleOption.Builder(serverClientId)
                 .build()
